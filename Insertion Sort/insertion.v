@@ -35,55 +35,44 @@ Proof.
   intro.
   induction l.
   - simpl.
-    rewrite H.
-    reflexivity.
+    rewrite H ; auto.
   - simpl.
     case_eq (x =? a).
     + intro G.
       case_eq (y <=? a).
       * intro G1.
         simpl.
-        rewrite H,G.
-        reflexivity.
+        rewrite H,G ; auto.
       * intro G2.
         simpl.
         rewrite G.
         f_equal.
-        rewrite IHl.
-        reflexivity.
+        rewrite IHl ; auto.
     + intro G.
       case_eq (y <=? a).
       * intro G1.
         simpl.
-        rewrite H,G.
-        reflexivity.
+        rewrite H,G ; auto.
       * intro G2.
         simpl.
-        rewrite G.
-        rewrite IHl.
-        reflexivity.
+        rewrite G, IHl ; auto.
 Qed.
 
 Lemma pojavi_vstavi_eq (x : Z) (l : list Z): pojavi x (vstavi x l) = S (pojavi x l).
 Proof.
   induction l.
   - simpl.
-    rewrite Z.eqb_refl.
-    reflexivity.
+    rewrite Z.eqb_refl ; auto.
   - simpl.
     case_eq (x <=? a).
     + intro G.
       case_eq (x =? a) ; intro G1.
-      * rewrite Z.eqb_sym in G1.
-        rewrite Z.eqb_eq in G1.
+      * rewrite Z.eqb_sym, Z.eqb_eq in G1.
         rewrite G1.
         simpl.
-        rewrite Z.eqb_refl.
-        reflexivity.
+        rewrite Z.eqb_refl ; auto.
       * simpl.
-        rewrite Z.eqb_refl.
-        rewrite G1.
-        reflexivity.
+        rewrite Z.eqb_refl, G1 ; auto.
    + intro G.
      simpl.
      case_eq (x =? a) ; intro G1.
@@ -91,7 +80,7 @@ Proof.
         apply IHl.
      *  apply IHl.
 Qed.
-      
+
 Lemma urejen_vstavi (x : Z) (l : list Z): urejen l -> urejen (vstavi x l).
 Proof.
   intro.
@@ -130,8 +119,7 @@ Proof.
           proof.
             simpl.
             apply Z.leb_gt in K.
-            rewrite K.
-            reflexivity.
+            rewrite K ; auto.
           end proof.
 Qed.
    
@@ -154,18 +142,13 @@ Proof.
  - case_eq (x =? a).
    + intro.
      simpl.
+     rewrite H, IHl.
+     rewrite Z.eqb_sym, Z.eqb_eq in H.
      rewrite H.
-     rewrite IHl.
-     rewrite Z.eqb_sym in H.
-     rewrite Z.eqb_eq in H.
-     rewrite H.
-     rewrite <- (pojavi_vstavi_eq x (insertion l)).
-     reflexivity.
+     rewrite <- (pojavi_vstavi_eq x (insertion l)) ; auto.
   + intro.
     simpl.
-    rewrite H.
-    rewrite IHl.
-    rewrite (pojavi_vstavi_neq x a (insertion l)).
+    rewrite H, IHl, (pojavi_vstavi_neq x a (insertion l)).
     * reflexivity.
     * assumption.
 Qed.
